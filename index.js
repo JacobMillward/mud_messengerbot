@@ -3,7 +3,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
-const parse = require('./parse');
 const app = express();
 
 const fb_token = process.env.FB_PAGE_ACCESS_TOKEN;
@@ -28,10 +27,7 @@ app.post('/webhook/', function (req, res) {
         let sender = event.sender.id;
         if (event.message && event.message.text) {
             let text = event.message.text;
-            let tokens = parse.tokenise(text)
-            let commandFunc = parse.getCommandFunction(tokens[0]);
-            let output = commandFunc(tokens.shift());
-            sendTextMessage(sender, output);
+            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200));
         }
     }
     res.sendStatus(200);
