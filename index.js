@@ -31,7 +31,7 @@ app.post('/webhook/', function (req, res) {
             let tokens = parse.tokenise(text);
             let proc = parse.getCommandProc(tokens[0]);
             let responseText = proc(tokens.shift());
-            sendTextMessage(sender, + responseText);
+            sendTextMessage(sender, responseText);
         }
     }
     res.sendStatus(200);
