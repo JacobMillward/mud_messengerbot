@@ -7,7 +7,7 @@ var commands = [
     proc: function(args){
       let output = "";
       for(var cmd in commands) {
-        output += cmd.name + " - " + cmd.description + "\n";
+        output += cmd['name'] + " - " + cmd['description'] + "\n";
       }
       return output;
     }
