@@ -3,8 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const request = require('request');
-const parse = require('./parse');
-
+const parse = require('./parse')
 const app = express();
 
 const fb_token = process.env.FB_PAGE_ACCESS_TOKEN;
@@ -24,11 +23,6 @@ app.get('/', function (req, res) {
 
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-        res.send(req.query['hub.challenge']);
-        return;
-    }
-    res.send('Error, wrong token')
     for (let i = 0; i < messaging_events.length; i++) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
