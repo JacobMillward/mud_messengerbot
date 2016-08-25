@@ -6,8 +6,9 @@ var commands = [
     description: "Show this list of all possible commands",
     proc: function(args){
       let output = "";
-      for(var cmd in commands) {
-        output += cmd['name'] + " - " + cmd['description'] + "\n";
+      var arrayLength = commands.length;
+      for(var i = 0; i < arrayLength; i++) {
+        output += cmd[i].name + " - " + cmd[i].description + "\n";
       }
       return output;
     }
