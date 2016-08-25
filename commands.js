@@ -8,7 +8,7 @@ var commands = [
       let output = "";
       var arrayLength = commands.length;
       for(var i = 0; i < arrayLength; i++) {
-        output += cmd[i].name + " - " + cmd[i].description + "\n";
+        output += commands[i].name + " - " + commands[i].description + "\n";
       }
       return output;
     }
