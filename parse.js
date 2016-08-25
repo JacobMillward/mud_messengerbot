@@ -1,6 +1,6 @@
 'use strict'
 
-commands = require('./commands');
+var commands = require('./commands');
 
 exports.tokenise = function(string) {
   return string.match(/\S+/g);
