@@ -23,24 +23,25 @@ app.get('/', function (req, res) {
 });
 
 app.post('/webhook/', function (req, res) {
-    let messaging_events = req.body.entry[0].messaging;
-    if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
-        res.send(req.query['hub.challenge']);
-        return;
-    }
-    res.send('Error, wrong token')
-    for (let i = 0; i < messaging_events.length; i++) {
-        let event = req.body.entry[0].messaging[i];
-        let sender = event.sender.id;
-        if (event.message && event.message.text) {
-            let text = event.message.text;
-            let tokens = parse.tokenise(text);
-            let proc = parse.getCommandProc(tokens[0].toLowerCase());
-            let responseText = proc(tokens);
-            sendTextMessage(sender, responseText);
-        }
-    }
-    res.sendStatus(200);
+  if (req.query['hub.verify_token'] === 'my_voice_is_my_password_verify_me') {
+      res.send(req.query['hub.challenge']);
+      return;
+  }
+  res.send('Error, wrong token')
+    //
+    // let messaging_events = req.body.entry[0].messaging;
+    // for (let i = 0; i < messaging_events.length; i++) {
+    //     let event = req.body.entry[0].messaging[i];
+    //     let sender = event.sender.id;
+    //     if (event.message && event.message.text) {
+    //         let text = event.message.text;
+    //         let tokens = parse.tokenise(text);
+    //         let proc = parse.getCommandProc(tokens[0].toLowerCase());
+    //         let responseText = proc(tokens);
+    //         sendTextMessage(sender, responseText);
+    //     }
+    // }
+    // res.sendStatus(200);
 });
 
 function sendTextMessage(sender, text) {
