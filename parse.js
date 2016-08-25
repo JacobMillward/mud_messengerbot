@@ -12,7 +12,7 @@ exports.getCommandProc = function(string) {
   });
   if (cmdArray === undefined || cmdArray.length == 0) {
     var proc = function(args) {
-      return "Specified function does not exist"
+      return args[0] + ": command does not exist"
     }
   }
   else {
