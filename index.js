@@ -27,18 +27,22 @@ app.get('/webhook/', function (req, res) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
-})
+});
 
 app.post('/webhook/', function (req, res) {
     let messaging_events = req.body.entry[0].messaging;
+    //Sometimes messages are batched, so we handle each one individually
     for (let i = 0; i < messaging_events.length; i++) {
         let event = req.body.entry[0].messaging[i];
         let sender = event.sender.id;
+        //If it's a text message we process it and respond
         if (event.message && event.message.text) {
             let text = event.message.text;
             let tokens = parse.tokenise(text);
+            //Returns the proc function we need to call (or a default)
             let proc = parse.getCommandProc(tokens[0].toLowerCase());
             let responseText = proc(tokens);
+            //Send the response to the sender
             sendTextMessage(sender, responseText);
         }
     }
