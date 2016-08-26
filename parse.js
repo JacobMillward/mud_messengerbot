@@ -22,8 +22,8 @@ exports.getCommandProc = function(string) {
 }
 
 exports.handleInput = function(string) {
-  let tokens = parse.tokenise(string);
+  let tokens = exports.tokenise(string);
   //Returns the proc function we need to call (or a default)
-  let proc = parse.getCommandProc(tokens[0].toLowerCase());
+  let proc = exports.getCommandProc(tokens[0].toLowerCase());
   return proc(tokens);
 }
