@@ -20,3 +20,10 @@ exports.getCommandProc = function(string) {
   }
   return proc;
 }
+
+exports.handleInput = function(string) {
+  let tokens = parse.tokenise(string);
+  //Returns the proc function we need to call (or a default)
+  let proc = parse.getCommandProc(tokens[0].toLowerCase());
+  return proc(tokens);
+}

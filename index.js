@@ -38,10 +38,8 @@ app.post('/webhook/', function (req, res) {
         //If it's a text message we process it and respond
         if (event.message && event.message.text) {
             let text = event.message.text;
-            let tokens = parse.tokenise(text);
-            //Returns the proc function we need to call (or a default)
-            let proc = parse.getCommandProc(tokens[0].toLowerCase());
-            let responseText = proc(tokens);
+            //Pass text input to parser
+            let responseText = parse.handleInput(text);
             //Send the response to the sender
             sendTextMessage(sender, responseText);
         }
