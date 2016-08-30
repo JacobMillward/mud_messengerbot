@@ -62,6 +62,7 @@ app.post('/webhook/', function (req, res) {
             sendTextMessage(sender, responseText);
             console.log("To %s: %s", sender, responseText);
           }
+          db.close();
         }
         else {
           //TODO: Make a fancier player creation screen
@@ -75,10 +76,9 @@ app.post('/webhook/', function (req, res) {
               console.log('Inserted new player %d into database', sender);
               sendTextMessage(sender, "You haven't played before, so a new character has been created!");
             }
+            db.close();
           });
         }
-
-        db.close();
       });
     });
   }
