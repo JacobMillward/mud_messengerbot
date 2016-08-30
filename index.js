@@ -48,16 +48,23 @@ app.post('/webhook/', function (req, res) {
       let playersCol = db.collection('players');
 
       //Try and find player
-      playersCol.find({'fb_id': sender}).limit(1).next(function(err, result){
+      playersCol.find({'fb_id': sender}).limit(1).next(function(err, player){
         //If there exists a player, we process their command
-        if (result) {
-          //TODO: Pass player in as an argument
+        if (player) {
 
           //Make sure it's a text message
           if (event.message && event.message.text) {
             let text = event.message.text;
-            //Pass text input to parser
-            let responseText = parse.handleInput(text);
+
+            //Tokenise the input
+            let tokens = parse.tokenise(text);
+
+            //Map input to a command function
+            let proc = parse.getCommandProc(tokens[0].toLowerCase());
+
+            //Execute command proc with player and target passed in
+            let responseText = proc(player, tokens[1]);
+
             //Send the response to the player
             sendTextMessage(sender, responseText);
             console.log("To %s: %s", sender, responseText);
