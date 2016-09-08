@@ -3,7 +3,7 @@
 var commands = require('./commands');
 
 exports.tokenise = function(string) {
-  return string.toLocaleLowerCase().match(/\S+/g);
+  return string.toLowerCase().match(/\S+/g);
 }
 
 exports.getCommandProc = function(commandName) {
