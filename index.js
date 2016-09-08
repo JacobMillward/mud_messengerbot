@@ -81,7 +81,7 @@ app.post('/webhook/', function (req, res) {
               console.log(err);
             } else {
               console.log('Inserted new player %d into database', sender);
-              sendTextMessage(sender, "You haven't played before, so a new character has been created!");
+              sendTextMessage(sender, "You haven't played before, so a new character has been created! Try sending your command again");
             }
             db.close();
           });
