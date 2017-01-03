@@ -17,9 +17,9 @@ var commands = [
     name: "test",
     description: "Prints out a list of all passed in arguments",
     proc: function(player, targets) {
-      let response;
-      for (const t of targets) {
-        response += t + "\n";
+      let response = "";
+      for (var i=0; i < targets.length; i++) {
+        response += targets[i] + "\n";
       }
       return response;
     }

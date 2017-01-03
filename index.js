@@ -55,8 +55,8 @@ app.post('/webhook/', function (req, res) {
             //Map input to a command function
             let proc = parse.getCommandProc(tokens[0]);
 
-            //Execute command proc with player and target passed in
-            let responseText = proc(player, { name: tokens });
+            //Execute command proc with player and targets passed in
+            let responseText = proc(player, tokens);
 
             //Send the response to the player
             sendTextMessage(sender, responseText);
