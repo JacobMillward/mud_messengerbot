@@ -1,4 +1,5 @@
 'use strict'
+var rooms = require('./rooms');
 
 var commands = [
   {
@@ -24,6 +25,23 @@ var commands = [
         response += targets[i] + "\n";
       }
       return response;
+    }
+  },
+  {
+    name: "look",
+    usage: "look <object>",
+    description: "Look at the room you're in, or at <object>",
+    proc: function(player, targets) {
+      if (targets.length > 1) {
+        return "You can't look at objects at the moment, sorry!";
+      }
+      let current = rooms.filter(room => room.name == player.current_room)[0];
+      if (current) {
+        return current.lookDescription;
+      }
+      else {
+        return "Error: You're in an invalid room!";
+      }
     }
   }
 ];
