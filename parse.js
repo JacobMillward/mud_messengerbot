@@ -11,8 +11,8 @@ exports.getCommandProc = function(commandName) {
     return obj.name == commandName;
   });
   if (cmdArray === undefined || cmdArray.length == 0) {
-    var proc = function(args) {
-      return args[0] + ": command does not exist"
+    var proc = function(player, targets) {
+      return targets[0] + ": command does not exist"
     }
   }
   else {
