@@ -4,7 +4,7 @@ var commands = [
   {
     name: "help",
     description: "Show this list of all possible commands",
-    proc: function(player, target){
+    proc: function(player, targets){
       let output = "";
       var arrayLength = commands.length;
       for(var i = 0; i < arrayLength; i++) {
@@ -14,10 +14,14 @@ var commands = [
     }
   },
   {
-    name: "test-cmd",
+    name: "test",
     description: "Prints out a list of all passed in arguments",
-    proc: function(player, target) {
-      return JSON.stringify(player) + "\n" + JSON.stringify(target);
+    proc: function(player, targets) {
+      let response;
+      for (const t of targets) {
+        response += t + "\n";
+      }
+      return response;
     }
   }
 ];

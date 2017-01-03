@@ -38,21 +38,14 @@ app.post('/webhook/', function (req, res) {
   for (let i = 0; i < messaging_events.length; i++) {
     let event = req.body.entry[0].messaging[i];
     let sender = event.sender.id;
+    const db = MongoClient.connect(mongo_uri);
 
-    //Check if there exists a player for this person already, if not then ignore what they say and create a new one
-    MongoClient.connect(mongo_uri, function(err, db) {
-      if (err) {
-        console.log('Could not connect to the database. Error: ' + err);
-        return;
-      }
-      let playersCol = db.collection('players');
-
-      //Try and find player
-      playersCol.find({'fb_id': sender}).limit(1).next(function(err, player){
-        //If there exists a player, we process their command
+    db.then(
+      db => {
+        //Try and find player
+        return db.collection('players').findOne({'fb_id': sender});
+      }).then( function(player) {
         if (player) {
-
-          //Make sure it's a text message
           if (event.message && event.message.text) {
             let text = event.message.text;
 
@@ -63,52 +56,49 @@ app.post('/webhook/', function (req, res) {
             let proc = parse.getCommandProc(tokens[0]);
 
             //Execute command proc with player and target passed in
-            let responseText = proc(player, { name: tokens[1] }, db);
+            let responseText = proc(player, { name: tokens });
 
             //Send the response to the player
             sendTextMessage(sender, responseText);
-            console.log("To %s: %s", sender, responseText);
+            console.log("Message: %s\nResponse: %s\n", text, responseText);
           }
-          db.close();
         }
         else {
           //TODO: Make a fancier player creation screen
-          let player = {
-            'fb_id': sender
-          };
-          playersCol.insert(player, function (err, result) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log('Inserted new player %d into database', sender);
-              sendTextMessage(sender, "You haven't played before, so a new character has been created! Try sending your command again");
-            }
-            db.close();
-          });
+          return db.then( db => db.collection('players').insert({'fb_id': sender}));
         }
-      });
+      }).then( function(result) {
+        if (result) {
+          console.log('Inserted new player %d into database', sender);
+          sendTextMessage(sender, "You haven't played before, so a new character has been created! Try sending your command again");
+        }
+      }
+    ).then( function() {
+      res.sendStatus(200);
+    }).catch( function(err) {
+      console.log('Could not connect to the database. Error: ' + err);
+      return;
     });
   }
-  res.sendStatus(200);
 });
 
 function sendTextMessage(sender, text) {
   let messageData = { text:text };
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:fb_token},
-    method: 'POST',
-    json: {
-      recipient: {id:sender},
-      message: messageData,
-    }
-  }, function(error, response, body) {
-    if (error) {
-      console.log('Error sending messages: ', error);
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error);
-    }
-  });
+  // request({
+  //   url: 'https://graph.facebook.com/v2.6/me/messages',
+  //   qs: {access_token:fb_token},
+  //   method: 'POST',
+  //   json: {
+  //     recipient: {id:sender},
+  //     message: messageData,
+  //   }
+  // }, function(error, response, body) {
+  //   if (error) {
+  //     console.log('Error sending messages: ', error);
+  //   } else if (response.body.error) {
+  //     console.log('Error: ', response.body.error);
+  //   }
+  // });
 }
 
 // Spin up the server
