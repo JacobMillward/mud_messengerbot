@@ -65,7 +65,11 @@ app.post('/webhook/', function (req, res) {
         }
         else {
           //TODO: Make a fancier player creation screen
-          return db.then( db => db.collection('players').insert({'fb_id': sender}));
+          return db.then( db => db.collection('players').insert(
+            {
+              'fb_id': sender,
+              'current_room': 'starter_field'
+          }));
         }
       }).then( function(result) {
         if (result) {
